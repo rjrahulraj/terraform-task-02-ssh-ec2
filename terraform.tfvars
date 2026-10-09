@@ -1,6 +1,5 @@
 aws_region      = "eu-west-1"
-resource_prefix = "cmtr-cbzir072"
+resource_prefix = "cmtr-n9nbj5cz"
 project_tag     = "epam-tf-lab"
-id_tag          = "cmtr-cbzir072"
-
-
+id_tag          = "cmtr-n9nbj5cz"
+instance_type   = "t3.micro"

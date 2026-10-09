@@ -1,7 +1,7 @@
 data "aws_vpc" "existing" {
   filter {
     name   = "tag:Name"
-    values = ["cmtr-n9nbj5cz-vpc"]
+    values = ["${var.resource_prefix}-vpc"]
   }
 }
 
@@ -13,7 +13,7 @@ data "aws_subnets" "public" {
 
   filter {
     name   = "tag:Name"
-    values = ["cmtr-n9nbj5cz-public_subnet"]
+    values = ["${var.resource_prefix}-public_subnet"]
   }
 }
 
@@ -24,7 +24,7 @@ data "aws_subnet" "public" {
 data "aws_security_group" "existing" {
   filter {
     name   = "group-name"
-    values = ["cmtr-n9nbj5cz-sg"]
+    values = ["${var.resource_prefix}-sg"]
   }
 
   filter {
@@ -43,14 +43,24 @@ data "aws_ami" "amazon_linux" {
   }
 
   filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
     name   = "virtualization-type"
     values = ["hvm"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
   }
 }
 
 resource "aws_instance" "ec2" {
   ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.micro"
+  instance_type               = var.instance_type
   subnet_id                   = data.aws_subnet.public.id
   vpc_security_group_ids      = [data.aws_security_group.existing.id]
   key_name                    = aws_key_pair.keypair.key_name
